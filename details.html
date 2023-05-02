@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar{
+            display: flex;
+            height: 60px;
+            background-color: rgb(34, 32, 32);
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+        .nav-link > ul{
+            display: flex;
+            list-style: none;
+            
+        }
+        .nav-link > ul > li{
+            margin: 0px 40px;
+            
+
+        }
+        .nav-link > ul > li > a{
+            text-decoration: none;
+            color: white;
+            display: block;
+            font-weight: bold;
+            font-size: 20px;
+
+        }
+        .title{
+             margin: 0 20px;
+            font-size: 20px;
+        }
+        .card{
+            display: flex;
+            margin: 20px;
+            width: 80%;
+            margin: 0 auto;
+            /* flex-wrap: wrap ; */
+            font-size: 25px;
+            justify-content: space-around;
+        }
+        .image{
+            height: 400px;
+            width:40%;
+        }
+        .image a img{
+            height: 400px;
+            width: 100%;
+        }
+        .card-body{
+            width: 60%;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .btn{
+            display: flex;
+            margin-top: 10px;
+        }
+        .btn-buy , .btn-add{
+            background-color: #12f364;
+            color: black;
+            padding: 12px 20px;
+            border: none;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            
+        }
+        .btn-buy{
+            margin-left: 10px;
+        }
+        .btn-buy:hover , .btn-add:hover{
+            transition: all 0.2s;
+            background-color: #05c74c;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="title">
+            <h3 title="eCom"><a href="./index.html" style="text-decoration: none; color: white;">eCom</a> </h3>
+        </div>
+        <div class="nav-link">
+            <ul>
+                <li><a href="#" class="active" id="home">Home</a></li>
+                <!-- <li><a href="#" id="category">Category</a></li>
+                <li><a href="#" id="cart">Cart</a></li> -->
+                
+            </ul>
+        </div>
+    </div>
+    <h1 style="text-align: center; font-size: 45px; margin: 10px;">Details</h1>
+    <div class="container">
+
+    </div>
+    <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const product = urlParams.get('product')
+        console.log(product);
+        const container = document.getElementsByClassName('container');
+
+        async function data() {
+            let url = 'https://fakestoreapi.com/products/'+product;
+            try {
+                let res = await fetch(url);
+                return await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        async function cardRender() {
+            let cardData = await data();
+            console.log(cardData);
+            let html = '';
+            
+                let card = `<div class="card">
+                <div class="image">
+                     <a href="./details.html?product=${cardData.id}"><img src="${cardData.image}" alt="${cardData.title}" class="image"></a>
+                </div>
+                <div class="card-body">
+                    <div> <h4>${cardData.title}</h4></div>
+                    <div><p><strong>Description:</strong>${cardData.description}</p></div>
+                    
+                    <div>
+                        <p><strong>Rating:</strong>${cardData.rating.rate} out of 5</p>
+                        <div><h4>Price : ${cardData.price}</h4></div>
+                        <div class="btn"><button class="btn-add">Add to Cart</button>
+                        <button class="btn-buy">Buy now</button></div>
+                    </div>
+                </div>
+                
+                
+            </div>`;
+
+                html += card;
+            
+
+            let container = document.querySelector('.container');
+            container.innerHTML = html;
+        }
+
+        cardRender();
+    </script>
+</body>
+</html>
